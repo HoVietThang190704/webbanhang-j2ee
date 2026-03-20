@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="promotionSection(promoProducts)">
+        <section class="bg-[#FFD400] rounded-xl overflow-hidden shadow-lg border-4 border-[#FFD400]">
+            <!-- Header section TGDD Style -->
+            <div class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <img src="https://img.tgdd.vn/img-border/Sale-S-c-2-120x40.png" alt="Flash Sale" class="h-10">
+                    <div class="flex items-center gap-2 bg-white/20 px-3 py-1.5 rounded-full text-tgddDark">
+                        <span class="text-sm font-bold uppercase">Kết thúc sau:</span>
+                        <div class="flex gap-1 font-mono font-bold text-white bg-tgddDark px-2 py-0.5 rounded">
+                            <span id="hours">02</span>:<span id="minutes">45</span>:<span id="seconds">15</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-2 overflow-x-auto scrollbar-hide">
+                    <button class="bg-white text-tgddDark px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap border-2 border-white">FLASH SALE</button>
+                    <button class="bg-white/30 text-tgddDark px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap hover:bg-white transition">ĐIỆN THOẠI</button>
+                    <button class="bg-white/30 text-tgddDark px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap hover:bg-white transition">LAPTOP</button>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="bg-white p-4 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                <div th:each="product : ${promoProducts}" class="group relative flex flex-col bg-white rounded-lg border border-gray-100 hover:shadow-xl transition-all p-3">
+                    <!-- Discount Badge -->
+                    <div th:if="${product.discount != null and product.discount > 0}" 
+                         class="absolute top-2 right-2 bg-tgddRed text-white text-[11px] font-bold px-1.5 py-0.5 rounded z-10">
+                        <span th:text="${'-' + product.discount + '%'}"></span>
+                    </div>
+
+                    <!-- Image -->
+                    <a th:href="@{/products/{id}(id=${product.id})}" class="aspect-square flex items-center justify-center mb-3">
+                        <img th:if="${product.imagePath != null}" th:src="${product.imagePath}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform" />
+                        <img th:if="${product.imagePath == null and product.image != null}" th:src="@{/images/{f}(f=${product.image})}" class="max-h-full max-w-full object-contain" />
+                    </a>
+
+                    <!-- Title -->
+                    <h3 class="text-[14px] font-semibold text-gray-800 line-clamp-2 min-h-[40px] mb-2" th:text="${product.name}"></h3>
+
+                    <!-- Price -->
+                    <div class="mb-3">
+                        <div class="text-tgddRed font-bold text-lg" th:text="${product.getFormattedPrice()}"></div>
+                        <div th:if="${product.originalPrice != null}" class="text-gray-400 line-through text-xs" th:text="${#numbers.formatDecimal(product.originalPrice, 0, 'POINT', 0, 'COMMA') + '₫'}"></div>
+                    </div>
+
+                    <!-- Stock Progress Bar -->
+                    <div class="mt-auto">
+                        <div class="relative h-5 bg-[#ffecd2] rounded-full overflow-hidden flex items-center justify-center">
+                            <!-- Progress highlight -->
+                            <div class="absolute inset-y-0 left-0 bg-gradient-to-r from-[#ff9a00] to-[#ff5200]" 
+                                 th:style="'width: ' + (${product.startPromotionStock != null and product.startPromotionStock > 0} ? (${product.promotionStock} * 100 / ${product.startPromotionStock}) : '0') + '%'">
+                            </div>
+                            <!-- Text -->
+                            <span class="relative z-10 text-[10px] font-bold text-tgddDark uppercase">
+                                <span th:if="${product.promotionStock > 0}">
+                                    Còn <span th:text="${product.promotionStock}"></span>/<span th:text="${product.startPromotionStock ?: product.promotionStock}"></span> suất
+                                </span>
+                                <span th:unless="${product.promotionStock > 0}">HẾT SUẤT</span>
+                            </span>
+                            <!-- Fire icon -->
+                            <span class="absolute left-2 z-10 text-xs">🔥</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom Link -->
+            <div class="bg-white p-3 text-center border-t border-gray-100">
+                <a th:href="@{/products}" class="text-tgddBlue text-sm font-bold hover:underline">Xem tất cả khuyến mãi online ›</a>
+            </div>
+        </section>
+
+        <script>
+            // Simple Countdown Logic
+            function updateCountdown() {
+                const hoursEl = document.getElementById('hours');
+                const minsEl = document.getElementById('minutes');
+                const secsEl = document.getElementById('seconds');
+                
+                let h = parseInt(hoursEl.innerText);
+                let m = parseInt(minsEl.innerText);
+                let s = parseInt(secsEl.innerText);
+                
+                if (s > 0) s--;
+                else {
+                    s = 59;
+                    if (m > 0) m--;
+                    else {
+                        m = 59;
+                        if (h > 0) h--;
+                    }
+                }
+                
+                hoursEl.innerText = h.toString().padStart(2, '0');
+                minsEl.innerText = m.toString().padStart(2, '0');
+                secsEl.innerText = s.toString().padStart(2, '0');
+            }
+            setInterval(updateCountdown, 1000);
+        </script>
+    </div>
+</body>
+</html>

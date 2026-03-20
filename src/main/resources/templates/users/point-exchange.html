@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đổi điểm tích lũy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        tgddYellow: '#FFD400',
+                        tgddRed: '#e4002b',
+                        tgddBlue: '#288ad6',
+                        tgddDark: '#1d2939',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Arial', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+<body class="bg-[#f5f5f5] min-h-screen text-[#333] font-sans">
+    <!-- Header -->
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="h-[140px]"></div>
+
+    <main class="max-w-[800px] mx-auto px-4 py-8">
+        <div class="bg-white rounded-xl shadow-md p-6">
+            <h1 class="text-2xl font-bold text-tgddDark mb-6 text-center">Đổi Điểm Tích Lũy</h1>
+
+            <!-- Notifications -->
+            <div th:if="${error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <span class="block sm:inline" th:text="${error}"></span>
+            </div>
+            <div th:if="${success}" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <span class="block sm:inline" th:text="${success}"></span>
+            </div>
+
+            <div class="mb-6 bg-blue-50 border border-blue-200 p-4 rounded-lg text-center">
+                <p class="text-gray-600 mb-2">Điểm tích lũy hiện tại của bạn:</p>
+                <div class="text-4xl font-black text-tgddBlue mb-2" th:text="${loyaltyPoints}">0</div>
+                <p class="text-sm text-gray-500">Quy đổi điểm để nhận các ưu đãi hấp dẫn!</p>
+            </div>
+
+            <form th:action="@{/point-exchange/send-otp}" method="POST" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Chọn nhanh voucher</label>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+                        <button type="button" onclick="selectVoucher(10000)" class="voucher-btn border border-gray-300 rounded-lg p-3 text-center hover:border-tgddBlue hover:text-tgddBlue hover:bg-blue-50 transition bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-tgddBlue focus:border-transparent">
+                            <div class="font-bold text-lg text-red-600">10.000đ</div>
+                            <div class="text-xs text-gray-600 mt-1">1000 điểm</div>
+                        </button>
+                        <button type="button" onclick="selectVoucher(20000)" class="voucher-btn border border-gray-300 rounded-lg p-3 text-center hover:border-tgddBlue hover:text-tgddBlue hover:bg-blue-50 transition bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-tgddBlue focus:border-transparent">
+                            <div class="font-bold text-lg text-red-600">20.000đ</div>
+                            <div class="text-xs text-gray-600 mt-1">2000 điểm</div>
+                        </button>
+                        <button type="button" onclick="selectVoucher(40000)" class="voucher-btn border border-gray-300 rounded-lg p-3 text-center hover:border-tgddBlue hover:text-tgddBlue hover:bg-blue-50 transition bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-tgddBlue focus:border-transparent">
+                            <div class="font-bold text-lg text-red-600">40.000đ</div>
+                            <div class="text-xs text-gray-600 mt-1">4000 điểm</div>
+                        </button>
+                        <button type="button" onclick="selectVoucher(50000)" class="voucher-btn border border-gray-300 rounded-lg p-3 text-center hover:border-tgddBlue hover:text-tgddBlue hover:bg-blue-50 transition bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-tgddBlue focus:border-transparent">
+                            <div class="font-bold text-lg text-red-600">50.000đ</div>
+                            <div class="text-xs text-gray-600 mt-1">5000 điểm</div>
+                        </button>
+                        <button type="button" onclick="selectVoucher(100000)" class="voucher-btn border border-gray-300 rounded-lg p-3 text-center hover:border-tgddBlue hover:text-tgddBlue hover:bg-blue-50 transition bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-tgddBlue focus:border-transparent">
+                            <div class="font-bold text-lg text-red-600">100.000đ</div>
+                            <div class="text-xs text-gray-600 mt-1">10.000 điểm</div>
+                        </button>
+                    </div>
+
+                    <label for="pointsToExchange" class="block text-sm font-semibold text-gray-700 mb-1">Hoặc nhập số điểm cần đổi</label>
+                    <input type="number" id="pointsToExchange" name="pointsToExchange" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tgddBlue focus:border-tgddBlue transition"
+                           placeholder="Nhập số điểm..." required min="1" th:max="${loyaltyPoints}" oninput="clearVoucherSelection()">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Phương thức nhận mã OTP</label>
+                    <div class="flex gap-4">
+                        <label class="flex items-center gap-2 cursor-pointer p-3 border rounded-lg hover:border-tgddBlue flex-1">
+                            <input type="radio" name="method" value="EMAIL" checked class="text-tgddBlue focus:ring-tgddBlue">
+                            <span class="font-medium">Qua Email</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer p-3 border rounded-lg hover:border-tgddBlue flex-1">
+                            <input type="radio" name="method" value="SMS" class="text-tgddBlue focus:ring-tgddBlue">
+                            <span class="font-medium">Qua SMS</span>
+                        </label>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2">* Mã OTP sẽ được log ra màn hình Console/Terminal cho mục đích testing.</p>
+                </div>
+
+                <div class="pt-4 border-t">
+                    <button type="submit" 
+                            class="w-full bg-tgddBlue hover:bg-[#1a73c0] text-white font-bold py-3 px-4 rounded-lg transition"
+                            th:disabled="${loyaltyPoints <= 0}"
+                            th:classappend="${loyaltyPoints <= 0} ? 'opacity-50 cursor-not-allowed' : ''">
+                        Tiếp tục (Nhận mã OTP)
+                    </button>
+                    <p th:if="${loyaltyPoints <= 0}" class="text-center text-red-500 text-sm mt-2">Bạn không đủ điểm để thực hiện giao dịch này.</p>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script>
+        function selectVoucher(value) {
+            // Giá trị của voucher, số điểm cần đổi = giá trị / 10
+            const pointsNeeded = value / 10;
+            document.getElementById('pointsToExchange').value = pointsNeeded;
+            
+            // Cập nhật UI cho nút được chọn
+            const buttons = document.querySelectorAll('.voucher-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('ring-2', 'ring-tgddBlue', 'border-transparent', 'bg-blue-50');
+                btn.classList.add('border-gray-300', 'bg-white');
+            });
+            
+            const event = window.event;
+            const clickedBtn = event ? (event.currentTarget || event.target.closest('.voucher-btn')) : null;
+            if (clickedBtn) {
+                clickedBtn.classList.remove('border-gray-300', 'bg-white');
+                clickedBtn.classList.add('ring-2', 'ring-tgddBlue', 'border-transparent', 'bg-blue-50');
+            }
+        }
+
+        function clearVoucherSelection() {
+            const buttons = document.querySelectorAll('.voucher-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('ring-2', 'ring-tgddBlue', 'border-transparent', 'bg-blue-50');
+                btn.classList.add('border-gray-300', 'bg-white');
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+  <div th:fragment="categories">
+    <!-- TGDD-style Category Navigation Bar -->
+    <nav class="bg-white border-b border-gray-200 relative z-40 shadow-sm">
+      <div class="max-w-[1200px] mx-auto px-4">
+        <ul class="flex items-center overflow-x-auto scrollbar-hide gap-1 py-0">
+          <!-- "Tất cả" link -->
+          <li class="flex-shrink-0">
+            <a th:href="@{/products}"
+              class="flex items-center gap-1.5 px-3 py-3 text-[13px] font-semibold text-[#e4002b] border-b-2 border-[#e4002b] whitespace-nowrap no-underline"
+              th:classappend="${activeCategoryId == null and keyword == null} ? 'border-[#e4002b] text-[#e4002b]' : 'border-transparent text-gray-700 hover:text-[#e4002b] hover:border-[#e4002b]'">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+              Tất cả
+            </a>
+          </li>
+
+          <!-- Category items from DB -->
+          <li th:each="cat : ${categories}" class="flex-shrink-0"
+            th:with="ic=${cat.slug != null ? cat.slug : #strings.replace(#strings.toLowerCase(cat.name),' ','-')}">
+            <a th:href="@{/products(categoryId=${cat.id})}"
+              class="flex items-center gap-1.5 px-3 py-3 text-[13px] whitespace-nowrap no-underline transition-colors duration-150 border-b-2"
+              th:classappend="${activeCategoryId != null and activeCategoryId == cat.id} ? 'border-[#e4002b] text-[#e4002b] font-semibold' : 'border-transparent text-gray-700 hover:text-[#e4002b] hover:border-[#e4002b]'">
+              <!-- Category icon -->
+              <img th:if="${cat.icon != null and !cat.icon.isEmpty()}" th:src="${cat.icon}"
+                class="h-4 w-4 object-contain flex-shrink-0" onerror="this.style.display='none'" alt="" />
+              <img th:unless="${cat.icon != null and !cat.icon.isEmpty()}"
+                th:attr="src=@{/images/categoryicons/{ic}.png(ic=${ic})},alt=${cat.name},data-fallback=${#strings.replace(#strings.toLowerCase(cat.name),' ','-')}"
+                class="h-4 w-4 object-contain flex-shrink-0"
+                onerror="if(!this.dataset._tried){this.dataset._tried='1';this.src='/images/categoryicons/'+this.dataset.fallback+'.png';}else{this.style.display='none';}" />
+              <span th:text="${cat.name}"></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</body>
+
+</html>

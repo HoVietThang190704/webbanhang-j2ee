@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
+
+<head>
+    <title>Quản lý Danh mục</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg-main: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 24px rgba(99,102,241,0.08);
+        }
+
+        body { background: var(--bg-main); }
+
+        .admin-wrapper {
+            min-height: 100vh;
+            background: var(--bg-main);
+        }
+
+        /* ── Page header ── */
+        .page-header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
+            border-radius: 20px;
+            padding: 32px 36px;
+            margin-bottom: 28px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(99,102,241,0.3);
+        }
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 200px; height: 200px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .page-header::after {
+            content: '';
+            position: absolute;
+            bottom: -60px; left: 60px;
+            width: 150px; height: 150px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        .page-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 0 0 4px;
+            letter-spacing: -0.5px;
+        }
+        .page-header p { margin: 0; opacity: 0.8; font-size: 0.9rem; }
+
+        /* ── Stats cards ── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(99,102,241,0.15); }
+        .stat-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .stat-icon.purple { background: #ede9fe; color: #6366f1; }
+        .stat-icon.green  { background: #d1fae5; color: #10b981; }
+        .stat-icon.orange { background: #fef3c7; color: #f59e0b; }
+        .stat-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; }
+        .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--text-main); line-height: 1; }
+
+        /* ── Toolbar ── */
+        .toolbar {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 220px;
+            max-width: 380px;
+        }
+        .search-box i {
+            position: absolute;
+            left: 14px; top: 50%; transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+        .search-box input {
+            width: 100%;
+            padding: 10px 14px 10px 40px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.875rem;
+            background: var(--bg-main);
+            transition: border-color .2s, box-shadow .2s;
+            outline: none;
+        }
+        .search-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+        }
+        .btn-add {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: flex; align-items: center; gap: 8px;
+            text-decoration: none;
+            transition: transform .15s, box-shadow .15s;
+            white-space: nowrap;
+            box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+        }
+        .btn-add:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(99,102,241,0.4); color: #fff; }
+
+        /* ── Table card ── */
+        .table-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+        .table-card table { margin: 0; }
+
+        .table thead th {
+            background: #f8fafc;
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .6px;
+            padding: 14px 20px;
+            border-bottom: 2px solid var(--border);
+            white-space: nowrap;
+        }
+        .table tbody td {
+            padding: 14px 20px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.875rem;
+            color: var(--text-main);
+        }
+        .table tbody tr { transition: background .15s; }
+        .table tbody tr:hover { background: #f8faff; }
+        .table tbody tr:last-child td { border-bottom: none; }
+
+        /* ── Category name cell ── */
+        .cat-name {
+            display: flex; align-items: center; gap: 10px;
+        }
+        .cat-icon-wrap {
+            width: 38px; height: 38px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .cat-icon-wrap img { width: 28px; height: 28px; object-fit: contain; }
+        .cat-text strong { display: block; font-weight: 600; color: var(--text-main); }
+        .cat-text span { font-size: 0.72rem; color: var(--text-muted); }
+
+        /* ── Badge parent ── */
+        .badge-parent {
+            display: inline-flex; align-items: center; gap: 4px;
+            background: #ede9fe; color: #6366f1;
+            border-radius: 6px; padding: 3px 10px;
+            font-size: 0.75rem; font-weight: 600;
+        }
+        .badge-root {
+            display: inline-flex; align-items: center; gap: 4px;
+            background: #f1f5f9; color: var(--text-muted);
+            border-radius: 6px; padding: 3px 10px;
+            font-size: 0.75rem; font-weight: 500;
+        }
+
+        /* ── Slug badge ── */
+        .slug-code {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 3px 10px;
+            font-size: 0.75rem;
+            font-family: monospace;
+            color: var(--text-muted);
+        }
+
+        /* ── ID badge ── */
+        .id-badge {
+            background: #ede9fe;
+            color: var(--primary);
+            border-radius: 8px;
+            padding: 3px 10px;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        /* ── Action buttons ── */
+        .action-group { display: flex; gap: 8px; }
+        .btn-icon {
+            width: 34px; height: 34px;
+            border-radius: 9px;
+            border: none;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: transform .15s, box-shadow .15s;
+        }
+        .btn-icon:hover { transform: scale(1.1); }
+        .btn-edit  { background: #d1fae5; color: #10b981; }
+        .btn-edit:hover  { background: #10b981; color: #fff; box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
+        .btn-del   { background: #fee2e2; color: #ef4444; }
+        .btn-del:hover   { background: #ef4444; color: #fff; box-shadow: 0 4px 12px rgba(239,68,68,0.3); }
+
+        /* ── Empty state ── */
+        .empty-state {
+            text-align: center;
+            padding: 64px 24px;
+            color: var(--text-muted);
+        }
+        .empty-state i { font-size: 3rem; margin-bottom: 16px; opacity: .4; }
+        .empty-state p { font-size: 0.9rem; }
+
+        /* ── Search filter ── */
+        #searchInput { }
+    </style>
+</head>
+
+<body>
+<section layout:fragment="content">
+<div class="admin-wrapper p-4">
+
+    <!-- Page header -->
+    <div class="page-header">
+        <div style="position:relative;z-index:1">
+            <h1><i class="fa-solid fa-layer-group me-2"></i>Quản lý Danh mục</h1>
+            <p>Toàn bộ danh mục sản phẩm trong hệ thống</p>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon purple"><i class="fa-solid fa-layer-group"></i></div>
+            <div>
+                <div class="stat-label">Tổng danh mục</div>
+                <div class="stat-value" th:text="${#lists.size(categories)}">0</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon green"><i class="fa-solid fa-sitemap"></i></div>
+            <div>
+                <div class="stat-label">Danh mục cha</div>
+                <div class="stat-value"
+                     th:text="${#lists.size(categories.?[parent == null])}">0</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon orange"><i class="fa-solid fa-code-branch"></i></div>
+            <div>
+                <div class="stat-label">Danh mục con</div>
+                <div class="stat-value"
+                     th:text="${#lists.size(categories.?[parent != null])}">0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input id="searchInput" type="text" placeholder="Tìm kiếm tên danh mục..." oninput="filterTable(this.value)"/>
+        </div>
+        <a th:href="@{/admin/categories/add}" class="btn-add">
+            <i class="fa-solid fa-plus"></i> Thêm danh mục
+        </a>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+        <table class="table" id="catTable">
+            <thead>
+                <tr>
+                    <th style="width:70px">ID</th>
+                    <th>Tên danh mục</th>
+                    <th>Danh mục cha</th>
+                    <th>Slug</th>
+                    <th style="width:110px;text-align:center">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="cat : ${categories}"
+                    th:with="ic=${cat.slug != null ? cat.slug : #strings.replace(#strings.toLowerCase(cat.name),' ','-')}">
+
+                    <!-- ID -->
+                    <td><span class="id-badge" th:text="${cat.id}">1</span></td>
+
+                    <!-- Name + icon -->
+                    <td>
+                        <div class="cat-name">
+                            <div class="cat-icon-wrap">
+                                <img th:if="${cat.icon != null and !cat.icon.isEmpty()}"
+                                     th:src="${cat.icon}" alt=""
+                                     onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-tag\' style=\'color:#6366f1;font-size:14px\'></i>'"/>
+                                <img th:unless="${cat.icon != null and !cat.icon.isEmpty()}"
+                                     th:src="@{/images/categoryicons/{ic}.png(ic=${ic})}" alt=""
+                                     onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-tag\' style=\'color:#6366f1;font-size:14px\'></i>'"/>
+                            </div>
+                            <div class="cat-text">
+                                <strong th:text="${cat.name}">Tên</strong>
+                                <span th:text="${cat.parent != null ? 'Subcategory' : 'Root category'}"></span>
+                            </div>
+                        </div>
+                    </td>
+
+                    <!-- Parent -->
+                    <td>
+                        <span th:if="${cat.parent != null}" class="badge-parent">
+                            <i class="fa-solid fa-link" style="font-size:.65rem"></i>
+                            <span th:text="${cat.parent.name}">Parent</span>
+                        </span>
+                        <span th:unless="${cat.parent != null}" class="badge-root">
+                            <i class="fa-solid fa-star" style="font-size:.65rem"></i> Root
+                        </span>
+                    </td>
+
+                    <!-- Slug -->
+                    <td><span class="slug-code" th:text="${cat.slug}">slug</span></td>
+
+                    <!-- Actions -->
+                    <td>
+                        <div class="action-group" style="justify-content:center">
+                            <a th:href="@{/admin/categories/edit/{id}(id=${cat.id})}"
+                               class="btn-icon btn-edit" title="Chỉnh sửa">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                            <a th:href="@{/admin/categories/delete/{id}(id=${cat.id})}"
+                               class="btn-icon btn-del" title="Xoá"
+                               onclick="return confirm('Bạn có chắc muốn xoá danh mục này không?')">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Empty state nếu không có dữ liệu -->
+                <tr th:if="${#lists.isEmpty(categories)}">
+                    <td colspan="5">
+                        <div class="empty-state">
+                            <i class="fa-solid fa-folder-open"></i>
+                            <p>Chưa có danh mục nào. <a th:href="@{/admin/categories/add}">Thêm ngay</a></p>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+    function filterTable(q) {
+        q = q.toLowerCase();
+        document.querySelectorAll('#catTable tbody tr').forEach(function(row) {
+            var name = row.querySelector('.cat-text strong');
+            if (!name) return;
+            row.style.display = name.textContent.toLowerCase().includes(q) ? '' : 'none';
+        });
+    }
+</script>
+</section>
+</body>
+</html>

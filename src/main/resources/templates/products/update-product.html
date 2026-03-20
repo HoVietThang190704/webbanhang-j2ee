@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
+
+<head>
+    <title>Update Product</title>
+</head>
+
+<body>
+    <section layout:fragment="content" class="container mx-auto px-4 mt-6">
+        <h1 class="text-2xl font-bold mb-4">Chỉnh sửa sản phẩm</h1>
+        <form th:action="@{/products/update/{id}(id=${product.id})}" th:object="${product}" method="post" class="space-y-4" novalidate>
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                <input type="text" th:field="*{name}" id="name" required class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-tgddRed focus:border-tgddRed">
+                <div class="text-red-600 text-sm mt-1" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            </div>
+            <div>
+                <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+                <input type="text" th:field="*{price}" id="price" required class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-tgddRed focus:border-tgddRed">
+            </div>
+            <div>
+                <label for="stock" class="block text-sm font-medium text-gray-700">Stock (số lượng)</label>
+                <input type="number" th:field="*{stock}" id="stock" min="0" class="mt-1 block w-full rounded border-gray-300" th:value="${product.stock}">
+            </div>
+            <div>
+                <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+                <select th:field="*{category.id}" id="category" class="mt-1 block w-full rounded border-gray-300">
+                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" th:selected="${category.id == product.category.id}"></option>
+                </select>
+            </div>
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                <textarea th:field="*{description}" id="description" required maxlength="2000" rows="3" class="mt-1 block w-full rounded border-gray-300"></textarea>
+                <div class="text-red-600 text-sm mt-1" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+            </div>
+            <div>
+                <label for="image" class="block text-sm font-medium text-gray-700">Image filename (place under /static/images)</label>
+                <input type="text" th:field="*{image}" id="image" class="mt-1 block w-full rounded border-gray-300" placeholder="myphoto.jpg">
+            </div>
+            <div>
+                <label for="imagePath" class="block text-sm font-medium text-gray-700">Image URL or Path (optional)</label>
+                <input type="text" th:field="*{imagePath}" id="imagePath" class="mt-1 block w-full rounded border-gray-300" placeholder="/images/myphoto.jpg or https://example.com/img.jpg">
+            </div>
+            <div class="flex items-center gap-4">
+                <button type="submit" class="bg-tgddRed text-white px-4 py-2 rounded">Save Changes</button>
+                <a th:href="@{/products}" class="text-gray-600">Cancel</a>
+            </div>
+        </form>
+    </section>
+
+</body>
+
+</html>

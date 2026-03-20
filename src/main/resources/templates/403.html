@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>403 – Không có quyền truy cập</title>
+  <style>
+    body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f9f9f9; }
+    .box { text-align: center; }
+    .box h1 { font-size: 6rem; color: #e4002b; margin: 0; }
+    .box h2 { color: #333; }
+    .box a  { display: inline-block; margin-top: 16px; padding: 10px 24px; background: #FFD400; color: #333; border-radius: 999px; text-decoration: none; font-weight: 600; }
+    .box a:hover { background: #ffc200; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>403</h1>
+    <h2>Bạn không có quyền truy cập trang này</h2>
+    <a th:href="@{/}">← Về trang chủ</a>
+  </div>
+</body>
+</html>

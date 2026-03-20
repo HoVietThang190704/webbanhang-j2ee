@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
+
+<head>
+    <title>Add Product</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              tgddYellow: '#ffd400',
+              tgddRed: '#e4002b',
+              tgddBrown: '#2c1900'
+            },
+            boxShadow: {
+              card: '0 25px 60px rgba(0,0,0,0.12)'
+            }
+          }
+        }
+      };
+    </script>
+</head>
+
+<body>
+    <section layout:fragment="content" class="bg-[#fff9f3] min-h-screen py-10">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-10">
+                <div>
+                    <p class="text-xs uppercase tracking-[0.3em] text-[#f35c2a] font-semibold">trung tâm quản lý</p>
+                    <h1 class="text-4xl font-black text-tgddBrown">Thêm sản phẩm mới</h1>
+                    <p class="text-gray-500 mt-2">Điền đầy đủ thông tin để sản phẩm xuất hiện trong danh sách bán hàng.</p>
+                </div>
+                <div class="bg-white rounded-3xl border border-[#ffe4d4] shadow-card px-6 py-4 text-sm">
+                    <p class="text-gray-500">Lần cập nhật gần nhất</p>
+                    <p class="text-lg font-bold text-tgddBrown" th:text="${#dates.format(#dates.createNow(),'dd/MM/yyyy HH:mm')}" aria-live="polite"></p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-[32px] border border-[#ffe4d4] shadow-card overflow-hidden">
+                <div class="bg-gradient-to-r from-[#ffe7d1] to-[#ffd1f5] px-8 py-6">
+                    <h2 class="text-xl font-semibold text-tgddBrown">Thông tin cơ bản</h2>
+                    <p class="text-sm text-[#6e4b2f]">Các trường bắt buộc được đánh dấu *</p>
+                </div>
+
+                <form th:action="@{/products/add}" th:object="${product}" method="post" class="p-8 space-y-8" novalidate>
+                    <div class="grid gap-6 md:grid-cols-2">
+                        <div>
+                            <label for="name" class="text-sm font-semibold text-gray-700">Tên sản phẩm *</label>
+                            <input type="text" th:field="*{name}" id="name" required class="mt-2 w-full rounded-2xl border border-gray-200 bg-[#fff9f3] px-4 py-3 text-sm focus:border-tgddRed focus:ring-2 focus:ring-tgddRed/30">
+                            <div class="text-red-600 text-xs mt-1" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                        </div>
+                        <div>
+                            <label for="category" class="text-sm font-semibold text-gray-700">Danh mục *</label>
+                            <select th:field="*{category.id}" id="category" class="mt-2 w-full rounded-2xl border border-gray-200 bg-[#fff9f3] px-4 py-3 text-sm focus:border-tgddRed focus:ring-2 focus:ring-tgddRed/30">
+                                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="price" class="text-sm font-semibold text-gray-700">Giá bán *</label>
+                            <div class="mt-2 flex rounded-2xl border border-gray-200 bg-[#fff9f3]">
+                                <span class="px-4 py-3 text-gray-500 text-sm">₫</span>
+                                <input type="number" step="0.01" min="0" th:field="*{price}" id="price" required class="flex-1 rounded-r-2xl bg-transparent px-4 py-3 text-sm focus:outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="stock" class="text-sm font-semibold text-gray-700">Tồn kho *</label>
+                            <input type="number" th:field="*{stock}" id="stock" min="0" value="0" class="mt-2 w-full rounded-2xl border border-gray-200 bg-[#fff9f3] px-4 py-3 text-sm focus:border-tgddRed focus:ring-2 focus:ring-tgddRed/30">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="description" class="text-sm font-semibold text-gray-700">Mô tả chi tiết *</label>
+                        <textarea th:field="*{description}" id="description" required maxlength="2000" rows="4" class="mt-2 w-full rounded-2xl border border-gray-200 bg-[#fff9f3] px-4 py-3 text-sm focus:border-tgddRed focus:ring-2 focus:ring-tgddRed/30" placeholder="Nêu bật tính năng, ưu đãi, thời gian bảo hành..."></textarea>
+                        <div class="text-red-600 text-xs mt-1" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+                    </div>
+
+                    <div class="grid gap-6 md:grid-cols-2">
+                        <div>
+                            <label for="image" class="text-sm font-semibold text-gray-700">Tên file ảnh</label>
+                            <input type="text" th:field="*{image}" id="image" class="mt-2 w-full rounded-2xl border border-gray-200 bg-[#fff9f3] px-4 py-3 text-sm" placeholder="vd: iphone15.png">
+                        </div>
+                        <div>
+                            <label for="imagePath" class="text-sm font-semibold text-gray-700">Đường dẫn ảnh (tùy chọn)</label>
+                            <input type="text" th:field="*{imagePath}" id="imagePath" class="mt-2 w-full rounded-2xl border border-gray-200 bg-[#fff9f3] px-4 py-3 text-sm" placeholder="/images/apple.png hoặc https://...">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <p class="text-xs text-gray-500">Sau khi lưu bạn có thể chỉnh sửa mọi thông tin ở bước tiếp theo.</p>
+                        <div class="flex gap-3">
+                            <a th:href="@{/products}" class="inline-flex items-center justify-center rounded-full border border-gray-300 px-6 py-3 text-sm font-semibold text-gray-600 hover:bg-gray-100">Hủy bỏ</a>
+                            <button type="submit" class="inline-flex items-center justify-center rounded-full bg-gradient-to-b from-[#ff781f] to-[#ff4f1a] px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-200">Lưu sản phẩm</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

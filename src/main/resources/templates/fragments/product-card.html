@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+  <div th:fragment="productCard(product)">
+    <!-- TGDD-style Product Card (Enhanced) -->
+    <div class="group bg-white rounded-lg border border-gray-100 overflow-hidden hover:shadow-xl hover:border-tgddBlue transition-all duration-300 relative h-full flex flex-col p-3">
+      
+      <!-- Badges Layer -->
+      <div class="absolute top-2 left-2 z-10 flex flex-col gap-1">
+        <!-- Installment 0% -->
+        <div th:if="${product.promotion != null and product.promotion.contains('0%')}" 
+             class="bg-[#ff9f00] text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded shadow-sm uppercase">
+          Trả góp 0%
+        </div>
+        <!-- Online Discount -->
+        <div th:if="${product.discount != null and product.discount > 10}" 
+             class="bg-tgddRed text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded shadow-sm">
+          GIẢM SỐC
+        </div>
+      </div>
+
+      <!-- Product Image Container -->
+      <a th:href="@{/products/{id}(id=${product.id})}" class="block relative overflow-hidden mb-3 pt-[100%]">
+        <div class="absolute inset-0 flex items-center justify-center p-2 group-hover:scale-105 transition-transform duration-500">
+          <img th:if="${product.imagePath != null}" th:src="${product.imagePath}"
+               class="max-h-full max-w-full object-contain" th:alt="${product.name}" />
+          <img th:if="${product.imagePath == null and product.image != null}"
+               th:src="@{/images/{f}(f=${product.image})}" class="max-h-full max-w-full object-contain"
+               th:alt="${product.name}" />
+           <img th:if="${product.imagePath == null and product.image == null}"
+               th:src="@{/images/default-product.png}" class="max-h-full max-w-full object-contain opacity-20"
+               alt="No image" />
+        </div>
+      </a>
+
+      <!-- Content -->
+      <div class="flex flex-col flex-1">
+        <!-- Title -->
+        <a th:href="@{/products/{id}(id=${product.id})}" class="no-underline group-hover:text-tgddBlue transition-colors">
+          <h3 class="text-[14px] font-semibold text-gray-800 leading-tight line-clamp-2 min-h-[36px] mb-2" 
+              th:text="${product.name}"></h3>
+        </a>
+
+        <!-- Specs Tag -->
+        <div class="flex flex-wrap gap-1 mb-3">
+           <span th:if="${product.category != null}" 
+                 class="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded border border-gray-100" 
+                 th:text="${product.category.name}"></span>
+        </div>
+
+        <!-- Price Section -->
+        <div class="mt-auto space-y-1">
+          <!-- Main Price -->
+          <div class="flex items-center gap-2">
+            <span class="text-tgddRed text-[16px] font-extrabold" 
+                  th:text="${product.getFormattedPrice()}"></span>
+            
+            <span th:if="${product.promotionStock != null and product.promotionStock > 0 and product.discount != null and product.discount > 0}" 
+                  class="bg-red-50 text-tgddRed text-[11px] font-bold px-1 rounded border border-red-100">
+              -<span th:text="${product.discount}"></span>%
+            </span>
+          </div>
+          
+          <!-- Original Price -->
+          <div th:if="${product.promotionStock != null and product.promotionStock > 0 and product.originalPrice != null and product.originalPrice > product.price}" 
+               class="text-[12px] text-gray-400 line-through" 
+               th:text="${#numbers.formatDecimal(product.originalPrice, 0, 'POINT', 0, 'COMMA') + '₫'}">
+          </div>
+          
+          <!-- Promo Stock Badge -->
+          <div th:if="${product.promotionStock != null and product.promotionStock > 0}" 
+               class="text-[10px] text-orange-600 font-medium">
+               Còn <span th:text="${product.promotionStock}">0</span> suất KM
+          </div>
+        </div>
+
+        <!-- Rating/Review Placeholder -->
+        <div class="flex items-center gap-1 mt-2 mb-3">
+           <span class="text-yellow-400 text-[10px]">★★★★★</span>
+           <span class="text-[10px] text-gray-400">(45)</span>
+        </div>
+
+        <!-- Quick Actions -->
+        <button th:onclick="'location.href=\'/products/' + ${product.id} + '\''"
+                class="w-full py-2 border border-blue-500 text-blue-500 text-[12px] font-bold rounded hover:bg-blue-500 hover:text-white transition-all duration-200 uppercase">
+          Xem chi tiết
+        </button>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Xác nhận mã OTP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        tgddYellow: '#FFD400',
+                        tgddRed: '#e4002b',
+                        tgddBlue: '#288ad6',
+                        tgddDark: '#1d2939',
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+<body class="bg-[#f5f5f5] min-h-screen text-[#333] font-sans">
+    <!-- Header -->
+    <div th:replace="~{fragments/header :: header}"></div>
+    <div class="h-[140px]"></div>
+
+    <main class="max-w-[500px] mx-auto px-4 py-8">
+        <div class="bg-white rounded-xl shadow-md p-6">
+            <h1 class="text-2xl font-bold text-tgddDark mb-2 text-center">Xác Nhận Đổi Điểm</h1>
+            <p class="text-center text-gray-500 mb-6 text-sm">Vui lòng nhập mã OTP đã được gửi đến bạn.</p>
+
+            <!-- Notifications -->
+            <div th:if="${message}" class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <span class="block sm:inline" th:text="${message}"></span>
+            </div>
+
+            <form th:action="@{/point-exchange/verify}" method="POST" class="space-y-6">
+                <input type="hidden" name="pointsToExchange" th:value="${pointsToExchange}">
+                
+                <div class="bg-gray-50 border border-gray-200 p-4 rounded-lg text-center mb-6">
+                    <span class="text-gray-500 text-sm">Điểm muốn quy đổi: </span>
+                    <strong class="text-tgddRed text-lg" th:text="${pointsToExchange}">0</strong>
+                </div>
+
+                <div>
+                    <label for="otp" class="block text-sm font-semibold text-gray-700 mb-1 text-center">Mã OTP (6 số)</label>
+                    <input type="text" id="otp" name="otp" 
+                           class="w-full text-center tracking-[0.5em] font-bold text-2xl px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-tgddBlue focus:border-tgddBlue transition"
+                           placeholder="------" required maxlength="6" pattern="[0-9]{6}">
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" 
+                            class="w-full bg-tgddYellow hover:bg-[#e6c000] text-tgddDark font-bold py-3 px-4 rounded-lg transition shadow-sm">
+                        Xác Nhận Đổi Điểm
+                    </button>
+                    <div class="mt-4 text-center">
+                         <a th:href="@{/point-exchange}" class="text-tgddBlue text-sm hover:underline">Quay lại (Hủy bỏ)</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

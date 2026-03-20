@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${activeCategoryName != null ? activeCategoryName + ' | DemoShop' : 'Sản phẩm | DemoShop'}"></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              tgddYellow: '#ffd400',
+              tgddRed: '#e4002b',
+              tgddBlue: '#288ad6',
+              tgddDark: '#1d2939'
+            }
+          }
+        }
+      };
+    </script>
+    <style>
+        body { background-color: #f3f3f3; }
+        .no-underline { text-decoration: none !important; }
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    </style>
+</head>
+
+<body class="text-[#333] font-sans antialiased">
+    <!-- Header -->
+    <div th:replace="~{fragments/header :: header}"></div>
+    
+    <!-- Exact Spacer for Fixed Header (~140px) -->
+    <div class="h-[145px] w-full"></div>
+
+    <main class="min-h-screen">
+        <!-- Breadcrumb & Hero Category Header -->
+        <div class="bg-white border-b border-gray-200">
+            <div class="max-w-[1200px] mx-auto px-4 py-6">
+                <!-- Breadcrumbs -->
+                <nav class="flex items-center gap-2 text-[13px] text-gray-500 mb-4">
+                    <a th:href="@{/}" class="hover:text-tgddBlue no-underline">Trang chủ</a>
+                    <span>/</span>
+                    <span class="font-bold text-gray-900" th:text="${activeCategoryName ?: 'Tất cả sản phẩm'}"></span>
+                </nav>
+
+                <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900" 
+                    th:text="${activeCategoryName != null ? activeCategoryName : (keyword != null ? 'Kết quả cho: ' + keyword : 'Danh sách sản phẩm')}"></h1>
+                
+                <p class="text-[14px] text-gray-500 mt-2">
+                    <span th:text="${products != null ? #lists.size(products) : 0}"></span> sản phẩm phù hợp
+                </p>
+            </div>
+        </div>
+
+        <!-- Filter & Sort Bar -->
+        <div class="max-w-[1200px] mx-auto px-4 mt-6">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <!-- Quick Filters -->
+                <div class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 no-scrollbar">
+                    <span class="text-[13px] font-bold text-gray-700 whitespace-nowrap">Bộ lọc nhanh:</span>
+                    <button class="px-4 py-2 rounded-full border border-gray-200 text-[13px] hover:border-tgddBlue hover:text-tgddBlue transition bg-white font-medium">Giá thấp</button>
+                    <button class="px-4 py-2 rounded-full border border-gray-200 text-[13px] hover:border-tgddBlue hover:text-tgddBlue transition bg-white font-medium">Giá cao</button>
+                    <button class="px-4 py-2 rounded-full border border-gray-200 text-[13px] hover:border-tgddBlue hover:text-tgddBlue transition bg-white font-medium">Khuyến mãi</button>
+                </div>
+
+                <!-- Sort -->
+                <div class="flex items-center gap-3">
+                    <span class="text-[13px] text-gray-500">Sắp xếp:</span>
+                    <select class="text-[13px] border border-gray-200 rounded-lg px-3 py-2 bg-gray-50 outline-none focus:border-tgddBlue min-w-[140px]">
+                        <option>Bán chạy nhất</option>
+                        <option>Mới nhất</option>
+                        <option>Giá thấp đến cao</option>
+                        <option>Giá cao đến thấp</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="max-w-[1200px] mx-auto px-4 py-10">
+            
+            <!-- Empty State -->
+            <div th:if="${products == null or #lists.isEmpty(products)}" 
+                 class="bg-white rounded-2xl shadow-sm py-24 text-center px-6">
+                <img src="https://cdni.iconscout.com/illustration/premium/thumb/empty-cart-illustration-download-in-svg-png-gif-formats--shopping-no-item-product-basket-delivery-pack-e-commerce-illustrations-7333333.png" 
+                     class="w-48 mx-auto mb-6 opacity-80" alt="Empty" />
+                <h2 class="text-2xl font-bold text-gray-800">Không tìm thấy sản phẩm!</h2>
+                <p class="text-gray-500 mt-3 max-w-md mx-auto italic">Rất tiếc, hiện tại không có sản phẩm nào phù hợp với yêu cầu của bạn. Vui lòng thử lại với danh mục hoặc từ khóa khác.</p>
+                <div class="mt-8 flex justify-center gap-4">
+                    <a th:href="@{/products}" class="px-6 py-3 bg-tgddYellow text-gray-900 font-bold rounded-full hover:bg-yellow-400 transition no-underline">Xem tất cả sản phẩm</a>
+                    <a th:href="@{/}" class="px-6 py-3 border border-gray-300 text-gray-600 font-bold rounded-full hover:bg-gray-50 transition no-underline">Về trang chủ</a>
+                </div>
+            </div>
+
+            <!-- Main Grid -->
+            <div th:if="${products != null and !#lists.isEmpty(products)}" 
+                 class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5">
+                <div th:each="product : ${products}" class="h-full">
+                    <div th:insert="~{fragments/product-card :: productCard(${product})}" class="h-full"></div>
+                </div>
+            </div>
+
+            <!-- Load More Button -->
+            <div th:if="${products != null and !#lists.isEmpty(products) and #lists.size(products) >= 10}" 
+                 class="mt-12 flex justify-center">
+                <button class="px-10 py-3.5 bg-white border border-gray-200 text-[#288ad6] font-bold rounded-xl shadow-sm hover:border-tgddBlue transition-all active:scale-95 flex items-center gap-2">
+                    Xem thêm sản phẩm
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

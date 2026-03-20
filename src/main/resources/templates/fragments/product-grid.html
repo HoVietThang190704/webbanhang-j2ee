@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+  <div th:fragment="productGrid(products)" class="w-full">
+    <!-- Section Header (TGDD style) -->
+    <div class="flex items-center justify-between mb-4 px-1">
+      <div class="flex items-center gap-3">
+        <!-- Red accent bar -->
+        <div class="w-1 h-6 bg-[#e4002b] rounded-full"></div>
+        <div>
+          <p class="text-[11px] uppercase tracking-widest text-[#e4002b] font-semibold leading-none mb-0.5">Khuyến mãi
+            online</p>
+          <h2 class="text-[22px] font-extrabold text-[#1d2939]">Sản phẩm nổi bật</h2>
+        </div>
+      </div>
+      <a th:href="@{/products}"
+        class="flex items-center gap-1 text-[#288ad6] text-sm font-semibold hover:underline no-underline border border-[#288ad6] px-3 py-1.5 rounded-full hover:bg-[#e3f1fe] transition">
+        Xem tất cả
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- Slider wrapper -->
+    <div class="relative" data-product-slider data-products-per-page="12">
+      <!-- Prev button -->
+      <button type="button"
+        class="hidden absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-white hover:bg-[#e3f1fe] text-[#288ad6] shadow-md border border-gray-200 rounded-full p-2.5 transition z-10"
+        data-product-prev aria-label="Xem trước">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+          stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+
+      <!-- Product grid: 2 / 3 / 4 / 5 / 6 cols responsive -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5"
+        data-product-grid>
+        <div th:each="product : ${products}" class="h-full" data-product-item>
+          <div th:insert="~{fragments/product-card :: productCard(${product})}" class="h-full"></div>
+        </div>
+      </div>
+
+      <!-- Next button -->
+      <button type="button"
+        class="hidden absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-white hover:bg-[#e3f1fe] text-[#288ad6] shadow-md border border-gray-200 rounded-full p-2.5 transition z-10"
+        data-product-next aria-label="Xem tiếp">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+          stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+
+      <!-- Page indicator -->
+      <div class="mt-3 text-center text-xs text-gray-400" data-product-indicator hidden></div>
+    </div>
+  </div>
+</body>
+
+</html>

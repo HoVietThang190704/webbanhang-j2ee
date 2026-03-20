@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body>
+  <div th:fragment="header">
+    <!-- ===== TGDD-STYLE FULL HEADER ===== -->
+    <header class="fixed top-0 left-0 right-0 z-50" id="site-header">
+
+      <!-- ① Top promotional bar -->
+      <div
+        class="bg-gradient-to-r from-[#c60004] via-[#e4002b] to-[#c60004] text-white text-center py-1.5 text-[13px] font-semibold">
+        🔥 Flash Sale mỗi ngày – Giảm đến 70% – Số lượng có hạn!
+      </div>
+
+      <!-- ② Main row: Logo / Search / Actions -->
+      <div class="bg-[#FFD400]">
+        <div class="max-w-[1200px] mx-auto px-4 py-2 flex items-center gap-3">
+
+          <!-- Logo -->
+          <a th:href="@{/}" class="flex-shrink-0">
+            <img th:src="@{/images/logotgdd.png}" alt="DemoShop" class="h-11 w-auto block" />
+          </a>
+
+          <!-- Search -->
+          <div class="flex-1 relative">
+            <form th:action="@{/products}" method="get">
+              <div class="relative">
+                <button type="submit"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#e4002b] transition">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z" />
+                  </svg>
+                </button>
+                <input id="hdr-search" name="q" type="text" placeholder="Bạn cần tìm gì?"
+                  class="w-full h-10 rounded-full pl-10 pr-4 text-sm border-0 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#e4002b]/30"
+                  onkeyup="hdrSuggest(this.value)" autocomplete="off" maxlength="120" />
+                <div id="hdr-suggest-box"
+                  class="hidden absolute top-full left-0 right-0 mt-1 bg-white rounded-xl shadow-xl border border-gray-100 z-50">
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Right actions -->
+          <div class="flex items-center gap-1 flex-shrink-0">
+            <!-- Chưa đăng nhập: hiện nút Đăng nhập -->
+            <a sec:authorize="isAnonymous()" th:href="@{/login}"
+              class="flex flex-col items-center text-gray-800 hover:text-[#e4002b] transition px-3 py-1 rounded-full hover:bg-[#ffe14c] no-underline min-w-[64px]">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              <span class="text-[11px]">Đăng nhập</span>
+            </a>
+
+            <!-- Đã đăng nhập: hiện tên tài khoản + dropdown Đăng xuất -->
+            <div sec:authorize="isAuthenticated()" class="relative group/user flex-shrink-0">
+              <button type="button"
+                class="flex flex-col items-center text-gray-800 hover:text-[#e4002b] transition px-3 py-1 rounded-full hover:bg-[#ffe14c] min-w-[64px]">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span class="text-[11px] font-semibold max-w-[80px] truncate" sec:authentication="name">Tôi</span>
+              </button>
+              <!-- Dropdown menu -->
+              <div class="hidden group-hover/user:block absolute right-0 top-[90%] pt-2 bg-transparent z-50">
+                <div class="bg-white border border-gray-100 rounded-xl shadow-xl w-44 py-1">
+                <a th:href="@{/profile}"
+                  class="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-[#fff8e1] hover:text-[#e4002b] no-underline transition">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                  Tài khoản của tôi
+                </a>
+                <a th:href="@{/point-exchange}"
+                  class="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-[#fff8e1] hover:text-[#e4002b] no-underline transition">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                  </svg>
+                  Đổi điểm tích lũy
+                </a>
+                <hr class="my-1 border-gray-100"/>
+                <form th:action="@{/logout}" method="post">
+                  <button type="submit"
+                    class="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition text-left">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1"/>
+                    </svg>
+                    Đăng xuất
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+            <a th:href="@{/cart}"
+              class="flex flex-col items-center text-gray-800 hover:text-[#e4002b] transition px-3 py-1 rounded-full hover:bg-[#ffe14c] no-underline min-w-[64px]">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              <span class="text-[11px]">Giỏ hàng</span>
+            </a>
+
+            <button type="button"
+              class="hidden md:flex items-center gap-1 bg-[#ffe14c] hover:bg-[#ffd000] text-gray-800 rounded-full px-3 py-2 text-[12px] transition">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              Hồ Chí Minh
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ TGDD Main-Menu bar: icon + label, hover dropdown shows children -->
+      <div class="bg-[#FFD400] border-t border-[#e5b800]">
+        <div class="max-w-[1200px] mx-auto px-2">
+          <ul class="tgdd-main-menu flex items-center flex-wrap">
+
+            <!-- Top-level categories only (parent == null) -->
+            <li th:each="cat : ${categories}" th:if="${cat.parent == null}"
+              class="tgdd-menu-item relative flex-shrink-0">
+
+              <a th:href="@{/products(categoryId=${cat.id})}"
+                class="tgdd-menu-link flex items-center gap-1.5 px-3 py-2.5 text-[13px] font-medium text-gray-900 hover:bg-[#ffe14c] whitespace-nowrap no-underline">
+
+                <!-- Category icon from static folder, fallback hidden -->
+                <img th:if="${cat.icon != null and !cat.icon.isEmpty()}" th:src="${cat.icon}"
+                  class="h-5 w-5 object-contain flex-shrink-0" onerror="this.style.display='none'" alt="" />
+                <img th:unless="${cat.icon != null and !cat.icon.isEmpty()}"
+                  th:src="@{/images/categoryicons/{s}.png(s=${cat.slug != null ? cat.slug : 'default'})}"
+                  class="h-5 w-5 object-contain flex-shrink-0" onerror="this.style.display='none'" alt="" />
+
+                <span th:text="${cat.name}">Danh mục</span>
+
+                <!-- Down arrow (visible if has children - we check via JS after load) -->
+                <svg class="h-2.5 w-2.5 ml-0.5 child-arrow hidden" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </a>
+
+              <!-- Dropdown container: populated via JS from embedded JSON data -->
+              <div
+                class="tgdd-dropdown hidden absolute left-0 top-full z-50 bg-white border border-gray-200 rounded-b-xl shadow-2xl w-max min-w-[450px] max-w-[900px] p-5"
+                th:attr="data-parent-id=${cat.id}">
+                <!-- Mega Menu Grid -->
+                <div class="flex flex-wrap gap-x-8 gap-y-6">
+                  <!-- Render Level 2 Categories -->
+                  <div th:each="child : ${categories}" th:if="${child.parent != null and child.parent.id == cat.id}"
+                    class="flex flex-col min-w-[160px]">
+
+                    <!-- Level 2 Title -->
+                    <a th:href="@{/products(categoryId=${child.id})}" data-child="true"
+                      class="flex flex-col items-center justify-center p-2 rounded-xl font-bold text-[14px] text-gray-800 hover:text-[#e4002b] hover:bg-[#fff8e1] transition no-underline group/L2 text-center h-full">
+                      <img th:if="${child.icon != null and !child.icon.isEmpty()}" th:src="${child.icon}"
+                        class="h-10 w-10 object-contain mb-2 group-hover/L2:-translate-y-1 transition-transform"
+                        onerror="this.style.display='none'" alt="" />
+                      <img th:unless="${child.icon != null and !child.icon.isEmpty()}"
+                        th:src="@{/images/categoryicons/{s}.png(s=${child.slug != null ? child.slug : 'default'})}"
+                        class="h-10 w-10 object-contain mb-2 group-hover/L2:-translate-y-1 transition-transform"
+                        onerror="this.style.display='none'" alt="" />
+                      <span th:text="${child.name}" class="leading-tight">Sub Category</span>
+                    </a>
+
+                    <!-- Render Level 3 Categories under this Level 2 (if any) -->
+                    <div class="grid grid-cols-2 gap-2">
+                      <div th:each="grandChild : ${categories}"
+                        th:if="${grandChild.parent != null and grandChild.parent.id == child.id}">
+                        <a th:href="@{/products(categoryId=${grandChild.id})}"
+                          class="flex flex-col items-center justify-center p-2 rounded-xl hover:bg-[#fff8e1] hover:shadow-sm border border-transparent transition group/gc no-underline text-center h-full">
+                          <img th:if="${grandChild.icon != null and !grandChild.icon.isEmpty()}"
+                            th:src="${grandChild.icon}"
+                            class="h-10 w-10 object-contain mb-2 group-hover/gc:-translate-y-1 transition-transform"
+                            onerror="this.style.display='none'" alt="" />
+                          <img th:unless="${grandChild.icon != null and !grandChild.icon.isEmpty()}"
+                            th:src="@{/images/categoryicons/{s}.png(s=${grandChild.slug != null ? grandChild.slug : 'default'})}"
+                            class="h-10 w-10 object-contain mb-2 group-hover/gc:-translate-y-1 transition-transform"
+                            onerror="this.style.display='none'" alt="" />
+                          <span class="text-[12px] text-gray-700 group-hover/gc:text-[#e4002b] leading-tight"
+                            th:text="${grandChild.name}">Item</span>
+                        </a>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <!-- Always show "Xem tất cả" at bottom -->
+                <div class="border-t border-gray-100 mt-4 pt-4">
+                  <a th:href="@{/products(categoryId=${cat.id})}"
+                    class="flex justify-center items-center gap-2 px-4 py-2.5 text-[14px] text-[#288ad6] hover:bg-[#e3f1fe] rounded-xl no-underline transition font-medium w-full text-center">
+                    Xem tất cả <span th:text="${cat.name}"></span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+
+    </header>
+
+    <style>
+      .tgdd-main-menu {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      .tgdd-main-menu::-webkit-scrollbar {
+        display: none;
+      }
+
+      .tgdd-menu-link {
+        transition: background 0.15s;
+      }
+
+      .tgdd-menu-item:hover>.tgdd-dropdown {
+        display: block !important;
+      }
+
+      .tgdd-dropdown {
+        animation: tgddFadeIn 0.15s ease;
+        margin-top: 0;
+      }
+
+      .tgdd-menu-item::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -4px;
+        height: 4px;
+      }
+
+      @keyframes tgddFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-4px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .tgdd-menu-item:hover .child-arrow {
+        display: inline !important;
+      }
+    </style>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.tgdd-menu-item').forEach(function (li) {
+          var childLinks = li.querySelectorAll('[data-child]');
+          var arrow = li.querySelector('.child-arrow');
+          if (childLinks.length > 0 && arrow) {
+            arrow.classList.remove('hidden');
+          }
+        });
+      });
+
+      function hdrSuggest(q) {
+        var box = document.getElementById('hdr-suggest-box');
+        if (!box) return;
+        if (!q || q.trim().length < 2) { box.classList.add('hidden'); box.innerHTML = ''; return; }
+        box.innerHTML = '<div class="p-3 text-sm text-gray-700">Tìm kiếm: <strong>' + q.replace(/</g, '&lt;') + '</strong></div>';
+        box.classList.remove('hidden');
+      }
+      document.addEventListener('click', function (e) {
+        var sb = document.getElementById('hdr-search');
+        var box = document.getElementById('hdr-suggest-box');
+        if (box && sb && !sb.contains(e.target) && !box.contains(e.target)) box.classList.add('hidden');
+      });
+    </script>
+  </div>
+</body>
+
+</html>
