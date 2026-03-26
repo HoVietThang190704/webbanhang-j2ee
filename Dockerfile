@@ -3,7 +3,7 @@ FROM maven:3.8.5-openjdk-17 AS builder
 WORKDIR /app
 
 COPY momopayment-lib ./momopayment-lib
-RUN cd momopayment-lib && mvn clean install -DskipTests -Dgpg.skip
+RUN cd momopayment-lib && mvn clean install -DskipTests "-Dgpg.skip=true"
 
 COPY pom.xml .
 RUN mvn dependency:go-offline
