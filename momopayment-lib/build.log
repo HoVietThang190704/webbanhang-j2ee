@@ -1,0 +1,96 @@
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for io.github.momo-wallet:momopayment:jar:1.0
+[WARNING] 'dependencies.dependency.version' for org.jetbrains:annotations:jar is either LATEST or RELEASE (both of them are being deprecated) @ line 254, column 22
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-jar-plugin is missing. @ line 162, column 21
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO] 
+[INFO] -----------------< io.github.momo-wallet:momopayment >------------------
+[INFO] Building momopayment 1.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ momopayment ---
+[INFO] Deleting E:\SaveCode\BTJ2EE\thang\momopayment-lib\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ momopayment ---
+[INFO] Copying 3 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.1:compile (default-compile) @ momopayment ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 43 source files to E:\SaveCode\BTJ2EE\thang\momopayment-lib\target\classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ momopayment ---
+[INFO] skip non existing resourceDirectory E:\SaveCode\BTJ2EE\thang\momopayment-lib\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.1:testCompile (default-testCompile) @ momopayment ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to E:\SaveCode\BTJ2EE\thang\momopayment-lib\target\test-classes
+[INFO] 
+[INFO] --- surefire:2.22.0:test (default-test) @ momopayment ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ momopayment ---
+[INFO] Building jar: E:\SaveCode\BTJ2EE\thang\momopayment-lib\target\momopayment-1.0.jar
+[INFO] 
+[INFO] --- shade:3.2.1:shade (default) @ momopayment ---
+[INFO] Including org.apache.httpcomponents:httpclient:jar:4.4.1 in the shaded jar.
+[INFO] Including org.apache.httpcomponents:httpcore:jar:4.4.1 in the shaded jar.
+[INFO] Including commons-logging:commons-logging:jar:1.2 in the shaded jar.
+[INFO] Including commons-codec:commons-codec:jar:1.9 in the shaded jar.
+[INFO] Including com.squareup.okhttp3:okhttp:jar:3.11.0 in the shaded jar.
+[INFO] Including com.squareup.okio:okio:jar:1.14.0 in the shaded jar.
+[INFO] Including com.google.code.gson:gson:jar:2.8.2 in the shaded jar.
+[INFO] Including commons-lang:commons-lang:jar:2.0 in the shaded jar.
+[INFO] Including commons-io:commons-io:jar:2.4 in the shaded jar.
+[INFO] Including log4j:log4j:jar:1.2.17 in the shaded jar.
+[INFO] Including org.apache.logging.log4j:log4j-iostreams:jar:2.8.2 in the shaded jar.
+[INFO] Including org.apache.logging.log4j:log4j-api:jar:2.8.2 in the shaded jar.
+[INFO] Including com.vaadin.external.google:android-json:jar:0.0.20131108.vaadin1 in the shaded jar.
+[INFO] Including org.jetbrains:annotations:jar:26.1.0 in the shaded jar.
+[INFO] Replacing original artifact with shaded artifact.
+[INFO] Replacing E:\SaveCode\BTJ2EE\thang\momopayment-lib\target\momopayment-1.0.jar with E:\SaveCode\BTJ2EE\thang\momopayment-lib\target\momopayment-1.0-shaded.jar
+[INFO] 
+[INFO] >>> source:3.0.1:jar (attach-sources) > generate-sources @ momopayment >>>
+[INFO] 
+[INFO] <<< source:3.0.1:jar (attach-sources) < generate-sources @ momopayment <<<
+[INFO] 
+[INFO] 
+[INFO] --- source:3.0.1:jar (attach-sources) @ momopayment ---
+[INFO] Building jar: E:\SaveCode\BTJ2EE\thang\momopayment-lib\target\momopayment-1.0-sources.jar
+[INFO] 
+[INFO] --- jar:3.4.1:jar (empty-javadoc-jar) @ momopayment ---
+[WARNING] JAR will be empty - no content was marked for inclusion!
+[INFO] Building jar: E:\SaveCode\BTJ2EE\thang\momopayment-lib\target\momopayment-1.0-javadoc.jar
+[INFO] 
+[INFO] --- gpg:1.6:sign (sign-artifacts) @ momopayment ---
+[INFO] 
+[INFO] --- install:3.1.2:install (default-install) @ momopayment ---
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/resolver/maven-resolver-util/1.9.18/maven-resolver-util-1.9.18.pom
+Progress (1): 830 BProgress (1): 2.1 kBProgress (1): 2.9 kB                    Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/resolver/maven-resolver-util/1.9.18/maven-resolver-util-1.9.18.pom (2.9 kB at 7.2 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/resolver/maven-resolver/1.9.18/maven-resolver-1.9.18.pom
+Progress (1): 755 BProgress (1): 1.7 kBProgress (1): 3.6 kBProgress (1): 8.3 kBProgress (1): 10.0 kBProgress (1): 14 kB  Progress (1): 18 kBProgress (1): 20 kBProgress (1): 22 kB                   Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/resolver/maven-resolver/1.9.18/maven-resolver-1.9.18.pom (22 kB at 290 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/resolver/maven-resolver-api/1.9.18/maven-resolver-api-1.9.18.pom
+Progress (1): 831 BProgress (1): 2.1 kBProgress (1): 2.7 kB                    Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/resolver/maven-resolver-api/1.9.18/maven-resolver-api-1.9.18.pom (2.7 kB at 34 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-xml/3.0.0/plexus-xml-3.0.0.pom
+Progress (1): 815 BProgress (1): 1.9 kBProgress (1): 3.7 kB                    Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-xml/3.0.0/plexus-xml-3.0.0.pom (3.7 kB at 49 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/resolver/maven-resolver-util/1.9.18/maven-resolver-util-1.9.18.jar
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/resolver/maven-resolver-api/1.9.18/maven-resolver-api-1.9.18.jar
+Downloading from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-xml/3.0.0/plexus-xml-3.0.0.jar
+Progress (1): 0.9/157 kBProgress (1): 2.3/157 kBProgress (1): 3.6/157 kBProgress (1): 5.0/157 kBProgress (1): 6.4/157 kBProgress (1): 7.7/157 kBProgress (1): 9.1/157 kBProgress (1): 10/157 kB Progress (1): 12/157 kBProgress (1): 13/157 kBProgress (1): 15/157 kBProgress (1): 16/157 kBProgress (1): 17/157 kBProgress (1): 19/157 kBProgress (1): 20/157 kBProgress (1): 21/157 kBProgress (1): 23/157 kBProgress (1): 24/157 kBProgress (1): 25/157 kBProgress (1): 26/157 kBProgress (1): 27/157 kBProgress (1): 29/157 kBProgress (1): 30/157 kBProgress (1): 31/157 kBProgress (1): 33/157 kBProgress (1): 34/157 kBProgress (1): 36/157 kBProgress (1): 40/157 kBProgress (1): 44/157 kBProgress (1): 48/157 kBProgress (1): 52/157 kBProgress (1): 57/157 kBProgress (1): 61/157 kBProgress (1): 65/157 kBProgress (1): 69/157 kBProgress (1): 74/157 kBProgress (1): 78/157 kBProgress (1): 82/157 kBProgress (1): 86/157 kBProgress (1): 91/157 kBProgress (1): 95/157 kBProgress (1): 99/157 kBProgress (1): 103/157 kBProgress (1): 107/157 kBProgress (1): 112/157 kBProgress (1): 116/157 kBProgress (1): 118/157 kBProgress (1): 123/157 kBProgress (1): 127/157 kBProgress (1): 131/157 kBProgress (1): 135/157 kBProgress (1): 140/157 kBProgress (1): 144/157 kBProgress (1): 148/157 kBProgress (1): 152/157 kBProgress (1): 157/157 kBProgress (1): 157 kB                        Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/resolver/maven-resolver-api/1.9.18/maven-resolver-api-1.9.18.jar (157 kB at 1.1 MB/s)
+Progress (1): 0.9/196 kBProgress (1): 2.3/196 kBProgress (1): 3.6/196 kBProgress (1): 5.0/196 kBProgress (1): 6.4/196 kBProgress (1): 7.7/196 kBProgress (1): 9.1/196 kBProgress (1): 10/196 kB Progress (1): 12/196 kBProgress (1): 13/196 kBProgress (1): 15/196 kBProgress (1): 16/196 kBProgress (1): 17/196 kBProgress (1): 19/196 kBProgress (1): 20/196 kBProgress (1): 21/196 kBProgress (1): 23/196 kBProgress (1): 24/196 kBProgress (1): 26/196 kBProgress (1): 27/196 kBProgress (1): 28/196 kBProgress (1): 30/196 kBProgress (1): 31/196 kBProgress (1): 32/196 kBProgress (1): 34/196 kBProgress (1): 35/196 kBProgress (1): 36/196 kBProgress (1): 38/196 kBProgress (1): 39/196 kBProgress (1): 41/196 kBProgress (1): 42/196 kBProgress (1): 43/196 kBProgress (1): 45/196 kBProgress (1): 46/196 kBProgress (1): 47/196 kBProgress (1): 49/196 kBProgress (1): 50/196 kBProgress (1): 52/196 kBProgress (1): 53/196 kBProgress (1): 54/196 kBProgress (1): 56/196 kBProgress (1): 57/196 kBProgress (1): 61/196 kBProgress (1): 65/196 kBProgress (1): 70/196 kBProgress (1): 74/196 kBProgress (1): 78/196 kBProgress (1): 82/196 kBProgress (2): 82/196 kB | 0.9/93 kBProgress (2): 82/196 kB | 2.3/93 kBProgress (2): 82/196 kB | 3.6/93 kBProgress (2): 86/196 kB | 3.6/93 kBProgress (2): 86/196 kB | 5.0/93 kBProgress (2): 86/196 kB | 6.4/93 kBProgress (2): 86/196 kB | 7.7/93 kBProgress (2): 91/196 kB | 7.7/93 kBProgress (2): 91/196 kB | 9.1/93 kBProgress (2): 91/196 kB | 10/93 kB Progress (2): 91/196 kB | 12/93 kBProgress (2): 91/196 kB | 13/93 kBProgress (2): 91/196 kB | 15/93 kBProgress (2): 91/196 kB | 16/93 kBProgress (2): 91/196 kB | 17/93 kBProgress (2): 91/196 kB | 19/93 kBProgress (2): 91/196 kB | 20/93 kBProgress (2): 91/196 kB | 21/93 kBProgress (2): 91/196 kB | 23/93 kBProgress (2): 91/196 kB | 24/93 kBProgress (2): 91/196 kB | 26/93 kBProgress (2): 95/196 kB | 26/93 kBProgress (2): 95/196 kB | 27/93 kBProgress (2): 99/196 kB | 27/93 kBProgress (2): 99/196 kB | 28/93 kBProgress (2): 99/196 kB | 29/93 kBProgress (2): 103/196 kB | 29/93 kBProgress (2): 103/196 kB | 31/93 kBProgress (2): 103/196 kB | 32/93 kBProgress (2): 108/196 kB | 32/93 kBProgress (2): 108/196 kB | 33/93 kBProgress (2): 108/196 kB | 35/93 kBProgress (2): 108/196 kB | 36/93 kBProgress (2): 108/196 kB | 38/93 kBProgress (2): 112/196 kB | 38/93 kBProgress (2): 112/196 kB | 39/93 kBProgress (2): 112/196 kB | 40/93 kBProgress (2): 116/196 kB | 40/93 kBProgress (2): 116/196 kB | 42/93 kBProgress (2): 116/196 kB | 43/93 kBProgress (2): 116/196 kB | 44/93 kBProgress (2): 116/196 kB | 46/93 kBProgress (2): 116/196 kB | 47/93 kBProgress (2): 120/196 kB | 47/93 kBProgress (2): 120/196 kB | 48/93 kBProgress (2): 125/196 kB | 48/93 kBProgress (2): 125/196 kB | 50/93 kBProgress (2): 125/196 kB | 51/93 kBProgress (2): 125/196 kB | 53/93 kBProgress (2): 125/196 kB | 54/93 kBProgress (2): 125/196 kB | 55/93 kBProgress (2): 125/196 kB | 60/93 kBProgress (2): 129/196 kB | 60/93 kBProgress (2): 133/196 kB | 60/93 kBProgress (2): 137/196 kB | 60/93 kBProgress (2): 141/196 kB | 60/93 kBProgress (2): 146/196 kB | 60/93 kBProgress (2): 150/196 kB | 60/93 kBProgress (2): 154/196 kB | 60/93 kBProgress (2): 158/196 kB | 60/93 kBProgress (2): 163/196 kB | 60/93 kBProgress (2): 167/196 kB | 60/93 kBProgress (2): 171/196 kB | 60/93 kBProgress (2): 175/196 kB | 60/93 kBProgress (2): 180/196 kB | 60/93 kBProgress (2): 184/196 kB | 60/93 kBProgress (2): 188/196 kB | 60/93 kBProgress (2): 192/196 kB | 60/93 kBProgress (2): 196 kB | 60/93 kB    Progress (2): 196 kB | 64/93 kBProgress (2): 196 kB | 68/93 kBProgress (2): 196 kB | 72/93 kBProgress (2): 196 kB | 76/93 kBProgress (2): 196 kB | 81/93 kB                               Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/resolver/maven-resolver-util/1.9.18/maven-resolver-util-1.9.18.jar (196 kB at 784 kB/s)
+Progress (1): 85/93 kBProgress (1): 89/93 kBProgress (1): 93 kB                      Downloaded from central: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-xml/3.0.0/plexus-xml-3.0.0.jar (93 kB at 361 kB/s)
+[INFO] Installing E:\SaveCode\BTJ2EE\thang\momopayment-lib\pom.xml to C:\Users\ROG\.m2\repository\io\github\momo-wallet\momopayment\1.0\momopayment-1.0.pom
+[INFO] Installing E:\SaveCode\BTJ2EE\thang\momopayment-lib\target\momopayment-1.0.jar to C:\Users\ROG\.m2\repository\io\github\momo-wallet\momopayment\1.0\momopayment-1.0.jar
+[INFO] Installing E:\SaveCode\BTJ2EE\thang\momopayment-lib\target\momopayment-1.0-sources.jar to C:\Users\ROG\.m2\repository\io\github\momo-wallet\momopayment\1.0\momopayment-1.0-sources.jar
+[INFO] Installing E:\SaveCode\BTJ2EE\thang\momopayment-lib\target\momopayment-1.0-javadoc.jar to C:\Users\ROG\.m2\repository\io\github\momo-wallet\momopayment\1.0\momopayment-1.0-javadoc.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  6.568 s
+[INFO] Finished at: 2026-03-10T15:09:26+07:00
+[INFO] ------------------------------------------------------------------------
